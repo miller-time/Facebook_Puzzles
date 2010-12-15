@@ -93,9 +93,7 @@ def graph_it(first_liar, liar_dict, n):
 # this function returns a number of nodes that can be reached, including self.
 def reachable_nodes(start, liar_dict):
   visited = []
-  new_visited = rec_reachable(visited, start, liar_dict)
-  return len(new_visited)
-
+  return len(rec_reachable(visited, start, liar_dict))
 
 def rec_reachable(visited, node, liar_dict):
   if node not in visited:

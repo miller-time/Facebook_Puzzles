@@ -1,4 +1,6 @@
+#!/usr/bin/python
 import sys, re
+
 
 def parse_file():
   if not sys.argv[1]:
@@ -19,12 +21,14 @@ def parse_file():
   liar_dict = get_dict(file_list, n)
   solve_it(liar_dict, n)
     
+
 def find_accuser(string):
   match = re.search(r'(\w+)\s+(\d+)', string)
   if not match:
     print("regex error.")
     sys.exit(1)
   return (match.group(1), int(match.group(2)))
+
 
 def get_dict(file_list, n):
   liar_dict = {}
@@ -41,13 +45,26 @@ def get_dict(file_list, n):
     current_line = current_line + m + 1
   return liar_dict
 
+
 def solve_it(liar_dict, n):
-  # arbitrarily pick a person
-  first_liar = liar_dict.keys()[0]
-  # add them to the liars
+  first_liar = ''
+  for liar in liar_dict.keys():
+    if reachable_nodes(liar, liar_dict) == n:
+      first_liar = liar
+      break
+  graph_it(first_liar, liar_dict, n)
+
+
+# this function traverses a directed graph, with 'first liar'
+# being the start node, each node being a dict key, and its
+# connected nodes being its dict value
+def graph_it(first_liar, liar_dict, n):
+  # list of liars
   liars = [first_liar,]
+  # list of honest
   honest = []
-  while(len(liars) + len(honest) < n):
+  pair = (liars, honest)
+  while (len(liars) + len(honest) != n):
     # step through the liars..
     for liar in liars:
       # get folk liar has accused
@@ -57,7 +74,6 @@ def solve_it(liar_dict, n):
         if good not in honest:
           # add em to list if not already there
           honest.append(good)
-          print("found an honest! "+good)
     # and the honest folk..
     for good in honest:
       # get folk good has accused
@@ -66,15 +82,37 @@ def solve_it(liar_dict, n):
       for liar in liar_folk:
         if liar not in liars:
           liars.append(liar)
-          print("found a liar! "+liar)
-  print("liars..")
-  print(liars)
-  print("honest..")
-  print(honest)
+  l = len(liars)
+  h = len(honest)
+  if l >= h:
+    print("%d %d") % (l,h)
+  else:
+    print("%d %d") % (h,l)
+
+
+# this function returns a number of nodes that can be reached, including self.
+def reachable_nodes(start, liar_dict):
+  visited = []
+  new_visited = rec_reachable(visited, start, liar_dict)
+  return len(new_visited)
+
+
+def rec_reachable(visited, node, liar_dict):
+  if node not in visited:
+    visited.append(node)
+    for child in liar_dict[node]:
+      children = rec_reachable(visited, child, liar_dict)
+      for grandchild in children:
+        if grandchild not in visited:
+          visited.append(grandchild)
+  return visited
+
+
 
 def main():
   if len(sys.argv) != 2:
     print("Please provide a filename.")
+    sys.exit(1)
   parse_file()
 
 if __name__ == '__main__':

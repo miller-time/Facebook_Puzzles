@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import sys
 
 def read_file():

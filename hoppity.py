@@ -15,8 +15,9 @@ def do_output(number):
       print("Hop")
 
 def main():
-  if len(sys.argv) < 2:
+  if len(sys.argv) != 2:
     print("Please provide a filename.")
+    sys.exit(1)
   number_string = read_file()
   do_output(int(number_string))
 

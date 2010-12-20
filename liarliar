@@ -106,7 +106,6 @@ def rec_reachable(visited, node, liar_dict):
   return visited
 
 
-
 def main():
   if len(sys.argv) != 2:
     print("Please provide a filename.")

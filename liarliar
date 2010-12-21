@@ -1,4 +1,9 @@
 #!/usr/bin/python
+# liarliar - .py removed for submission to the bot
+# Russell Miller - 2010
+# This is my solution [in progress] of the facebook puzzle:
+# http://www.facebook.com/careers/puzzles.php?puzzle_id=20
+
 import sys, re
 
 
